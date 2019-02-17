@@ -1,0 +1,59 @@
+.blankRow
+{
+    height: 10px;
+}
+
+.blankCell
+{
+    width: 10px;
+}
+
+.searchButton
+{
+    margin-right: 10px;
+    width: 70px !important;
+}
+
+.brandLogo
+{
+    float:left;
+}
+
+.navbar-toggler
+{
+    margin-right: 30px;
+}
+
+@media (max-width: 767px)
+{
+    .searchForm
+    {
+        float: left;
+    }
+}
+
+@media (min-width: 768px)
+{
+    .searchForm
+    {
+        float: right;
+    }
+}
+
+@media (max-width: 380px)
+{
+    .searchText
+    {
+        margin-right: 10px;
+        width: 165px !important;
+    }
+}
+
+@media (min-width: 381px)
+{
+    .searchText
+    {
+        margin-right: 10px;
+        width: 200px !important;
+    }
+}
