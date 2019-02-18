@@ -41,15 +41,18 @@
                     </div>
                     <div class="col-xs-6 col-sm-2 col-md-1 col-lg-1">
                         {!! Form::open(['action' => ['BooksController@destroy', $book->id], 'method' => 'POST']) !!}
-                        {{Form::hidden('_method', 'DELETE')}}
-                        {{Form::button('', ['type' => 'submit', 'class' => 'btn btn-primary fa fa-trash'])}}
+                            {{Form::hidden('_method', 'DELETE')}}
+                            {{Form::button('', ['type' => 'submit', 'class' => 'btn btn-primary fa fa-trash'])}}
                         {!! Form::close() !!}
                     </div>
                 </div>
             </li>
         </ul>
     @endforeach
-    {{$books->links()}}
+    @if (Request::is('pages/dashboard/*') || Request::is('books/list/*'))
+        {{$books->links()}}
+    @endif
+    <br><br>
 @else
     <br>
     <p>No book entries found</p>

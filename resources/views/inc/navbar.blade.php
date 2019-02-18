@@ -59,8 +59,8 @@
                     </li>
                 @endguest
                 {!! Form::open(['action' => 'BooksController@search', 'method' => 'POST', 'class' => 'form-inline searchForm']) !!}
-                {{Form::text('search', '', ['class' => 'form-control searchText', 'placeholder' => 'Search for Title or Author'])}}
-                {{Form::submit('Search', ['class' => 'btn btn-primary form-control searchButton'])}}
+                    {{Form::text('search', '', ['class' => 'form-control searchText', 'placeholder' => 'Search for Title or Author'])}}
+                    {{Form::submit('Search', ['class' => 'btn btn-primary form-control searchButton'])}}
                 {!! Form::close() !!}
             </ul>
         </div>

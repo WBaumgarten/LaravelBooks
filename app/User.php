@@ -33,7 +33,8 @@ class User extends Authenticatable
      *
      * @return object collection of books
      */
-    public function books(){
+    public function books()
+    {
       return $this->hasMany('App\Book');
     }
 }

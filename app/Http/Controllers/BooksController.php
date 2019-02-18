@@ -27,16 +27,7 @@ class BooksController extends Controller
     */
     public function index($orderType)
     {
-        if ($orderType == 'titles') {
-            //Sort by titles
-            $books = Book::orderBy('title', 'asc')->paginate(20);
-        } elseif ($orderType == 'authors') {
-            //Sort by authors
-            $books = Book::orderBy('author', 'asc')->paginate(20);
-        } else {
-            //Sort by default -> titles
-            $books = Book::orderBy('title', 'asc')->paginate(20);
-        }
+        $books = Book::getOrderedBy($orderType, 20);
         return view('books.index')->with('books', $books);
     }
 
@@ -85,7 +76,8 @@ class BooksController extends Controller
         $book = Book::find($id);
         $user = $book->user;
         $updater = $book->getUpdater();
-        return view('books.show')->with('book', $book)
+        return view('books.show')
+            ->with('book', $book)
             ->with('creator', $user)
             ->with('updater', $updater);
     }
@@ -151,10 +143,7 @@ class BooksController extends Controller
     */
     public function search(Request $request)
     {
-        //Create matching Books
-        $books = Book::where('title', 'LIKE', '%' . $request->search . '%')
-            ->orWhere('author', 'LIKE', '%' . $request->search . '%')
-            ->orderBy('title', 'asc')->paginate(20);
+        $books = Book::search($request->search);
         return view('books.search')->with('books', $books);
     }
 
@@ -167,28 +156,28 @@ class BooksController extends Controller
     */
     public function exportCSV($dataType)
     {
-        header("Content-type: text/csv");
-        header("Content-Disposition: attachment; filename=books.csv");
-        header("Pragma: no-cache");
-        header("Expires: 0");
+        header('Content-type: text/csv');
+        header('Content-Disposition: attachment; filename=books.csv');
+        header('Pragma: no-cache');
+        header('Expires: 0');
         $file = fopen('php://output', 'w');
 
-        if ($dataType == 'titles&authors') {
-            $books = Book::orderBy('title', 'asc')->get();
+        if ($dataType === 'titles&authors') {
+            $books = Book::getOrderedBy('titles', 0);
             $columns = array('Title', 'Author');
             fputcsv($file, $columns);
             foreach ($books as $book) {
                 fputcsv($file, array($book->title, $book->author));
             }
-        } elseif ($dataType == 'titles') {
-            $books = Book::orderBy('title', 'asc')->get();
+        } elseif ($dataType === 'titles') {
+            $books = Book::getOrderedBy('titles', 0);
             $columns = array('Title');
             fputcsv($file, $columns);
             foreach ($books as $book) {
                 fputcsv($file, array($book->title));
             }
-        } elseif ($dataType == 'authors'){
-            $books = Book::orderBy('author', 'asc')->get();
+        } elseif ($dataType === 'authors'){
+            $books = Book::getOrderedBy('authors', 0);
             $columns = array('Author');
             fputcsv($file, $columns);
             foreach ($books as $book) {
@@ -215,37 +204,41 @@ class BooksController extends Controller
         header('Content-Disposition: attachment; filename="books.xml"');
         $xml = new \DomDocument("1.0","UTF-8");
 
-        $booksContainer = $xml->createElement("books");
+        $booksContainer = $xml->createElement('books');
         $booksContainer = $xml->appendChild($booksContainer);
 
-        if ($dataType == 'titles&authors') {
-            $books = Book::orderBy('title', 'asc')->get();
+        if ($dataType === 'titles&authors') {
+            $books = Book::getOrderedBy('titles', 0);
             foreach ($books as $book) {
-                $bookContainer = $xml->createElement("book");
+                $bookContainer = $xml->createElement('book');
                 $bookContainer = $booksContainer->appendChild($bookContainer);
 
-                $title = $xml->createElement("title", $book->title);
+                $title = $xml->createElement('title',
+                    htmlspecialchars($book->title, ENT_XML1, 'UTF-8'));
                 $title = $bookContainer->appendChild($title);
 
-                $author = $xml->createElement("author", $book->author);
+                $author = $xml->createElement('author',
+                    htmlspecialchars($book->author, ENT_XML1, 'UTF-8'));
                 $author = $bookContainer->appendChild($author);
             }
-        } elseif ($dataType == 'titles') {
-            $books = Book::orderBy('title', 'asc')->get();
+        } elseif ($dataType === 'titles') {
+            $books = Book::getOrderedBy('titles', 0);
             foreach ($books as $book) {
-                $bookContainer = $xml->createElement("book");
+                $bookContainer = $xml->createElement('book');
                 $bookContainer = $booksContainer->appendChild($bookContainer);
 
-                $title = $xml->createElement("title", $book->title);
+                $title = $xml->createElement('title',
+                    htmlspecialchars($book->title, ENT_XML1, 'UTF-8'));
                 $title = $bookContainer->appendChild($title);
             }
-        } elseif ($dataType == 'authors'){
-            $books = Book::orderBy('author', 'asc')->get();
+        } elseif ($dataType === 'authors') {
+            $books = Book::getOrderedBy('authors', 0);
             foreach ($books as $book) {
-                $bookContainer = $xml->createElement("book");
+                $bookContainer = $xml->createElement('book');
                 $bookContainer = $booksContainer->appendChild($bookContainer);
 
-                $author = $xml->createElement("author", $book->author);
+                $author = $xml->createElement('author',
+                    htmlspecialchars($book->author, ENT_XML1, 'UTF-8'));
                 $author = $bookContainer->appendChild($author);
             }
         } else {
