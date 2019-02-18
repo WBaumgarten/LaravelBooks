@@ -2,7 +2,9 @@
 Laravel project, website managing book database.
 
 ## Requirements
-1) 
+1) xampp
+2) composer
+3) cmder (if you are working on windows)
 
 ## Starting up
 1) Clone this repository into your htdocs directory at "xampp\htdocs".
