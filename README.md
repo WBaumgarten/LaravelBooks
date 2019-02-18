@@ -13,8 +13,10 @@ Users can also export the book data in CSV or XML formats, according to the spec
 ### Starting up
 1) Clone this repository into your htdocs directory at "xampp\htdocs".
 2) Configure your vhosts file in "xampp\apache\conf\extra\httpd-vhosts.conf".
-3) Configure your hosts file in "Windows\System32\drivers\etc\hosts".
-4) Open phpMyAdmin and create a database called "laravelbooks".
-5) Open the LaravelBooks directory in a terminal and run "composer install".
-6) Open the LaravelBooks directory in a terminal and run "php artisan migrate".
-7) Run your favourite browser and go to the configured URL.
+3) Configure your hosts file in "Windows\System32\drivers\etc\hosts" (Use notepad in administrator mode).
+4) Run xampp and start the Apache server.
+5) In xampp start the MySQL server.
+6) Open phpMyAdmin and create a database called "laravelbooks".
+7) Open the LaravelBooks directory in a terminal and run "composer install".
+8) Open the LaravelBooks directory in a terminal and run "php artisan migrate".
+9) Run your favourite browser and go to the configured URL.
